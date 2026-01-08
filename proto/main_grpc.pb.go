@@ -26,8 +26,13 @@ const (
 // KVStoreClient is the client API for KVStore service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// The exposed service
 type KVStoreClient interface {
+	// Add key to the store; I didn't wanna return anything but it's forcing me to
+	// Find a way to not return anything?
 	Put(ctx context.Context, in *PutArgs, opts ...grpc.CallOption) (*PutResponse, error)
+	// Retrieve value from server, raises an error if it doesn't exist
 	Get(ctx context.Context, in *GetArgs, opts ...grpc.CallOption) (*GetResponse, error)
 }
 
@@ -62,8 +67,13 @@ func (c *kVStoreClient) Get(ctx context.Context, in *GetArgs, opts ...grpc.CallO
 // KVStoreServer is the server API for KVStore service.
 // All implementations must embed UnimplementedKVStoreServer
 // for forward compatibility.
+//
+// The exposed service
 type KVStoreServer interface {
+	// Add key to the store; I didn't wanna return anything but it's forcing me to
+	// Find a way to not return anything?
 	Put(context.Context, *PutArgs) (*PutResponse, error)
+	// Retrieve value from server, raises an error if it doesn't exist
 	Get(context.Context, *GetArgs) (*GetResponse, error)
 	mustEmbedUnimplementedKVStoreServer()
 }

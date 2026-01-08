@@ -2,9 +2,8 @@
 A simple in-memory threadsafe kv store implemented via gRPC. Just getting familiar with gRPC
 
 ### Setup & Run
-Generate proto files
+Generate proto files (from root)
 ```
-$ cd proto
 $ protoc \
     --go_out=. \
     --go_opt=paths=source_relative \
