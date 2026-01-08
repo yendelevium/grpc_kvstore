@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"sync"
 	"time"
 
 	pb "github.com/yendelevium/grpc_kvstore/proto"
@@ -22,13 +23,21 @@ func main() {
 	defer cancel()
 
 	// put key; response isn't needed
-	_, err = c.Put(ctx, &pb.PutArgs{
-		Key:   "kv",
-		Value: "store",
-	})
-	if err != nil {
-		log.Printf("Error in gRPC call: %v", err)
+	wg := sync.WaitGroup{}
+	for range 10000 {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			_, err = c.Put(ctx, &pb.PutArgs{
+				Key:   "kv",
+				Value: "store",
+			})
+			if err != nil {
+				log.Printf("Error in gRPC call: %v", err)
+			}
+		}()
 	}
+	wg.Wait()
 
 	// Existing Key
 	resp, err := c.Get(ctx, &pb.GetArgs{
