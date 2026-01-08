@@ -25,9 +25,7 @@ func main() {
 	// put key; response isn't needed
 	wg := sync.WaitGroup{}
 	for range 10000 {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			_, err = c.Put(ctx, &pb.PutArgs{
 				Key:   "kv",
 				Value: "store",
@@ -35,7 +33,7 @@ func main() {
 			if err != nil {
 				log.Printf("Error in gRPC call: %v", err)
 			}
-		}()
+		})
 	}
 	wg.Wait()
 
