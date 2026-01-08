@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"sync"
 
 	pb "github.com/yendelevium/grpc_kvstore/proto"
 	"google.golang.org/grpc"
@@ -13,11 +14,14 @@ import (
 type server struct {
 	pb.UnimplementedKVStoreServer
 	mp map[string]string
+	mu sync.RWMutex
 }
 
 func (s *server) Put(_ context.Context, in *pb.PutArgs) (*pb.PutResponse, error) {
 	// Add key-value to the store
 	log.Println("Recieved PUT request")
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	s.mp[in.Key] = in.Value
 	return &pb.PutResponse{
 		Value: s.mp[in.Key],
@@ -27,6 +31,8 @@ func (s *server) Put(_ context.Context, in *pb.PutArgs) (*pb.PutResponse, error)
 func (s *server) Get(_ context.Context, in *pb.GetArgs) (*pb.GetResponse, error) {
 	log.Println("Recieved GET request")
 	// Check for key in store
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 	val, ok := s.mp[in.Key]
 	if !ok {
 		// If value not in store, return error
@@ -49,6 +55,7 @@ func main() {
 	s := grpc.NewServer()
 	pb.RegisterKVStoreServer(s, &server{
 		mp: make(map[string]string),
+		mu: sync.RWMutex{},
 	})
 
 	log.Printf("server listening at %v", lis.Addr())
