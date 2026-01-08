@@ -9,6 +9,7 @@ import (
 
 	pb "github.com/yendelevium/grpc_kvstore/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type server struct {
@@ -17,15 +18,13 @@ type server struct {
 	mu sync.RWMutex
 }
 
-func (s *server) Put(_ context.Context, in *pb.PutArgs) (*pb.PutResponse, error) {
+func (s *server) Put(_ context.Context, in *pb.PutArgs) (*emptypb.Empty, error) {
 	// Add key-value to the store
 	log.Println("Recieved PUT request")
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.mp[in.Key] = in.Value
-	return &pb.PutResponse{
-		Value: s.mp[in.Key],
-	}, nil
+	return &emptypb.Empty{}, nil
 }
 
 func (s *server) Get(_ context.Context, in *pb.GetArgs) (*pb.GetResponse, error) {

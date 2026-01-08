@@ -1,13 +1,14 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
 package proto;
 option go_package = "grpc_kvstore/proto";
 
 // The exposed service
 service KVStore {
-  // Add key to the store; I didn't wanna return anything but it's forcing me to
-  // Find a way to not return anything?
-  rpc Put(PutArgs) returns(PutResponse);
+  // Add key to the store;
+  // google.protobuf.empty is just an empty struct -> for when you don't want to return a value
+  rpc Put(PutArgs) returns(google.protobuf.Empty);
 
   // Retrieve value from server, raises an error if it doesn't exist
   rpc Get(GetArgs) returns (GetResponse);
@@ -22,10 +23,6 @@ message GetArgs {
   string key = 1;
 }
 
-
-message PutResponse {
-  string value = 1;
-}
 message GetResponse {
   string value = 1;
 }

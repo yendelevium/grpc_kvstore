@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -29,9 +30,8 @@ const (
 //
 // The exposed service
 type KVStoreClient interface {
-	// Add key to the store; I didn't wanna return anything but it's forcing me to
-	// Find a way to not return anything?
-	Put(ctx context.Context, in *PutArgs, opts ...grpc.CallOption) (*PutResponse, error)
+	// Add key to the store;
+	Put(ctx context.Context, in *PutArgs, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// Retrieve value from server, raises an error if it doesn't exist
 	Get(ctx context.Context, in *GetArgs, opts ...grpc.CallOption) (*GetResponse, error)
 }
@@ -44,9 +44,9 @@ func NewKVStoreClient(cc grpc.ClientConnInterface) KVStoreClient {
 	return &kVStoreClient{cc}
 }
 
-func (c *kVStoreClient) Put(ctx context.Context, in *PutArgs, opts ...grpc.CallOption) (*PutResponse, error) {
+func (c *kVStoreClient) Put(ctx context.Context, in *PutArgs, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(PutResponse)
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, KVStore_Put_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -70,9 +70,8 @@ func (c *kVStoreClient) Get(ctx context.Context, in *GetArgs, opts ...grpc.CallO
 //
 // The exposed service
 type KVStoreServer interface {
-	// Add key to the store; I didn't wanna return anything but it's forcing me to
-	// Find a way to not return anything?
-	Put(context.Context, *PutArgs) (*PutResponse, error)
+	// Add key to the store;
+	Put(context.Context, *PutArgs) (*emptypb.Empty, error)
 	// Retrieve value from server, raises an error if it doesn't exist
 	Get(context.Context, *GetArgs) (*GetResponse, error)
 	mustEmbedUnimplementedKVStoreServer()
@@ -85,7 +84,7 @@ type KVStoreServer interface {
 // pointer dereference when methods are called.
 type UnimplementedKVStoreServer struct{}
 
-func (UnimplementedKVStoreServer) Put(context.Context, *PutArgs) (*PutResponse, error) {
+func (UnimplementedKVStoreServer) Put(context.Context, *PutArgs) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Put not implemented")
 }
 func (UnimplementedKVStoreServer) Get(context.Context, *GetArgs) (*GetResponse, error) {

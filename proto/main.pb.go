@@ -9,6 +9,7 @@ package proto
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -117,50 +118,6 @@ func (x *GetArgs) GetKey() string {
 	return ""
 }
 
-type PutResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Value         string                 `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PutResponse) Reset() {
-	*x = PutResponse{}
-	mi := &file_proto_main_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PutResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PutResponse) ProtoMessage() {}
-
-func (x *PutResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_main_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PutResponse.ProtoReflect.Descriptor instead.
-func (*PutResponse) Descriptor() ([]byte, []int) {
-	return file_proto_main_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *PutResponse) GetValue() string {
-	if x != nil {
-		return x.Value
-	}
-	return ""
-}
-
 type GetResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Value         string                 `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
@@ -170,7 +127,7 @@ type GetResponse struct {
 
 func (x *GetResponse) Reset() {
 	*x = GetResponse{}
-	mi := &file_proto_main_proto_msgTypes[3]
+	mi := &file_proto_main_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -182,7 +139,7 @@ func (x *GetResponse) String() string {
 func (*GetResponse) ProtoMessage() {}
 
 func (x *GetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_main_proto_msgTypes[3]
+	mi := &file_proto_main_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -195,7 +152,7 @@ func (x *GetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetResponse.ProtoReflect.Descriptor instead.
 func (*GetResponse) Descriptor() ([]byte, []int) {
-	return file_proto_main_proto_rawDescGZIP(), []int{3}
+	return file_proto_main_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetResponse) GetValue() string {
@@ -209,18 +166,16 @@ var File_proto_main_proto protoreflect.FileDescriptor
 
 const file_proto_main_proto_rawDesc = "" +
 	"\n" +
-	"\x10proto/main.proto\x12\x05proto\"1\n" +
+	"\x10proto/main.proto\x12\x05proto\x1a\x1bgoogle/protobuf/empty.proto\"1\n" +
 	"\aPutArgs\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value\"\x1b\n" +
 	"\aGetArgs\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\"#\n" +
-	"\vPutResponse\x12\x14\n" +
-	"\x05value\x18\x01 \x01(\tR\x05value\"#\n" +
 	"\vGetResponse\x12\x14\n" +
-	"\x05value\x18\x01 \x01(\tR\x05value2_\n" +
-	"\aKVStore\x12)\n" +
-	"\x03Put\x12\x0e.proto.PutArgs\x1a\x12.proto.PutResponse\x12)\n" +
+	"\x05value\x18\x01 \x01(\tR\x05value2c\n" +
+	"\aKVStore\x12-\n" +
+	"\x03Put\x12\x0e.proto.PutArgs\x1a\x16.google.protobuf.Empty\x12)\n" +
 	"\x03Get\x12\x0e.proto.GetArgs\x1a\x12.proto.GetResponseB\x14Z\x12grpc_kvstore/protob\x06proto3"
 
 var (
@@ -235,18 +190,18 @@ func file_proto_main_proto_rawDescGZIP() []byte {
 	return file_proto_main_proto_rawDescData
 }
 
-var file_proto_main_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_proto_main_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_proto_main_proto_goTypes = []any{
-	(*PutArgs)(nil),     // 0: proto.PutArgs
-	(*GetArgs)(nil),     // 1: proto.GetArgs
-	(*PutResponse)(nil), // 2: proto.PutResponse
-	(*GetResponse)(nil), // 3: proto.GetResponse
+	(*PutArgs)(nil),       // 0: proto.PutArgs
+	(*GetArgs)(nil),       // 1: proto.GetArgs
+	(*GetResponse)(nil),   // 2: proto.GetResponse
+	(*emptypb.Empty)(nil), // 3: google.protobuf.Empty
 }
 var file_proto_main_proto_depIdxs = []int32{
 	0, // 0: proto.KVStore.Put:input_type -> proto.PutArgs
 	1, // 1: proto.KVStore.Get:input_type -> proto.GetArgs
-	2, // 2: proto.KVStore.Put:output_type -> proto.PutResponse
-	3, // 3: proto.KVStore.Get:output_type -> proto.GetResponse
+	3, // 2: proto.KVStore.Put:output_type -> google.protobuf.Empty
+	2, // 3: proto.KVStore.Get:output_type -> proto.GetResponse
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -265,7 +220,7 @@ func file_proto_main_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_main_proto_rawDesc), len(file_proto_main_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
